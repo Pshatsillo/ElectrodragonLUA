@@ -1,0 +1,84 @@
+-- print("----request ----- \n\r" .. req .. "----end request --- \n\r")  
+                    --
+                --print("file_begin: \n\r" .. string.sub(req, 153))
+                
+                local file_end = string.find (req, "------WebKit")
+               --if file_end then print("file_end: \n\r" .. file_end) end
+                
+                if file_start then
+                  --file.open("test.lua", "a+")
+                  --file.write(req)
+                    --print("file_start: \n\r" .. file_start)
+                    file_begin = string.sub(req, file_start + 10) 
+                    local file_endr = string.find (file_begin, "------WebKit")
+                    if file_endr then  fullfile = string.sub(file_begin, 0, file_endr - 1) 
+                        -- print("file_end: \n\r" .. file_endr)
+                        -- print("file_end: \n\r" .. file_ends)
+                       -- file.open("test.lua", "a+")
+                      --  file.write(req)
+                       -- print("fullfile: \n\r" .. fullfile .. "------- END of file \n\r")
+                    end
+                --print("file_end: \n\r" .. file_endv)
+                end
+                req = ""
+              --  print("fullreq is: \n\r" .. fullreq .. " -------END")
+
+
+
+
+              ------------------------------------------------------------
+
+
+              conn:send(buf, function(endrequest)
+                        if end_file then
+                            endrequest:close()  
+                            buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"; 
+                            endfile = false
+                        end
+                            end);
+
+
+
+
+
+
+                            if files["mainconfig.lua"] then
+                if path then
+                    if string.match(path, password) then
+                        local buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n";
+                        if(_GET.cmd == "1:1")then
+                            relay_turnON(1)
+                        elseif(_GET.cmd == "1:0")then
+                            relay_turnOFF(1)
+                        elseif(_GET.cmd == "2:1")then
+                            relay_turnON(2)
+                        elseif(_GET.cmd == "2:0")then
+                            relay_turnOFF(2)
+                        elseif(_GET.cmd == "1:2")then
+                            relay_switch(1)
+                        elseif(_GET.cmd == "2:2")then
+                            relay_switch(2)
+                        end                   
+                --buf = buf.."<p>Relay 1 <a href=\"?pin=ON1\"><button>ON</button></a>&nbsp;<a href=\"?pin=OFF1\"><button>OFF</button></a></p>";
+               -- buf = buf.."<p>Relay 2 <a href=\"?pin=ON2\"><button>ON</button></a>&nbsp;<a href=\"?pin=OFF2\"><button>OFF</button></a></p>";
+                        for i=0,7 do 
+                            buf = buf.." <p><b>Port "..i..": </b>".. i2c_status[i] .. "</p>";
+                        end
+                        conn:send(buf, function(endrequest) endrequest:close() end);
+                    else
+                        local buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n";
+                        buf = buf.."<h1> wrong password</h1>";
+                        conn:send(buf, function(endrequest) endrequest:close() end);
+                    end
+                    
+                end
+            else
+                local buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n";
+                buf = buf.." <form name=\"conf\" method=\"GET\" action=\"conf\">";
+                buf = buf.." <p><b>password:</b><br> ";
+                buf = buf.." <input name=\"pass\"type=\"text\" size=\"40\" value =\"sec\">";
+                buf = buf.." <p><input type=\"submit\"></p> ";
+                buf = buf.." </form>";
+                conn:send(buf, function(endrequest) endrequest:close() end);
+                
+            end
