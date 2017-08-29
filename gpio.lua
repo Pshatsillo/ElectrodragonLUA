@@ -4,7 +4,7 @@ relay2_gpio = 7
 gpio.mode(relay1_gpio, gpio.OUTPUT)
 gpio.mode(relay2_gpio, gpio.OUTPUT)
 
-relay_status = {"NA","NA"}
+relay_status = {}
 
 function relay_turnON(port)
     if (port == 0) then gpio.write(relay1_gpio, gpio.HIGH); end

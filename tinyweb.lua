@@ -7,6 +7,7 @@ local filename = ""
 local files = file.list();
 local conf_pass = "";
 local configLua = "";
+
 if files["mainconfig.lua"] then dofile("mainconfig.lua") end
  
 if sv then      
@@ -87,6 +88,9 @@ if sv then
                     file.open("mainconfig.lua", "w+")
                     file.write(configLua)
                     file.close()
+                    local buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n";       
+                    buf = buf .. "<h2>Configured</h2>";
+                    conn:send(buf, function(endrequest) endrequest:close() end);
                     node.restart()
                 end
 
@@ -142,6 +146,14 @@ if sv then
                         elseif(_GET.cmd == "1:2")then
                             relay_switch(1)
                              buf = relay_status[1]
+                        elseif(_GET.cf == "1")then
+                            buf = buf .. "<a href=\"javascript:history.back()\">Back</a><br>"
+                            buf = buf .. "<form name=\"cf\" method=\"GET\" action=\"/"..password.."\">"
+                            buf = buf .. "IP<input name=\"ip\"type=\"text\" size=\"20\" value =\"\"><br>"
+                            buf = buf .. "Pwd<input name=\"pass\" type=\"text\" size=\"20\" value =\"sec\"><br>";
+                            buf = buf .. "<input type=\"hidden\" name=\"cf\" value=\"2\">"
+                            buf = buf .. "<input type=\"submit\" value=\"Save\">"
+                            buf = buf .. "</form>"
                         elseif(_GET.cmd == "all")then
                             buf = relay_status[0] .. ";"
                             buf = buf..relay_status[1] .. ";"
@@ -161,9 +173,12 @@ if sv then
                                 buf = buf .. i2c_status[tonumber(_GET.pt) - 2] .. "<br>"
                             end
                             buf = buf.."<p>P ".._GET.pt.." <a href=\"?pt=".._GET.pt.."&cmd=".._GET.pt..":1\">ON</a>&nbsp;<a href=\"?cmd=".._GET.pt..":0\">OFF</a></p>";
-                        else
+                        else  
+                            buf = buf .. "Dragon relay (fw:0.1)<br>"
+                            buf = buf .. "<a href=\"?cf=1\">Config</a><br>"
+                            buf = buf .. "--Ports--<br>"
                             for i=0,9 do 
-                               buf = buf.."<a href=\"?pt="..i.."\">P "..i.."</a><br>";
+                               buf = buf.."<a href=\"?pt="..i.."\">P"..i.." - "..ports[i].."</a><br>";
                             end
                         end                   
                 --buf = buf.."<p>Relay 1 <a href=\"?pin=ON1\"><button>ON</button></a>&nbsp;<a href=\"?pin=OFF1\"><button>OFF</button></a></p>";
@@ -177,7 +192,7 @@ if sv then
                     end
                 else
                     local buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n";
-                    buf = buf.." <form name=\"conf\" method=\"GET\" action=\"conf\">";
+                    buf = buf.." <form name=\"conf\" method=\"GET\" action=\"\conf\">";
                     buf = buf.." <p><b>password:</b><br> ";
                     buf = buf.." <input name=\"pass\"type=\"text\" size=\"40\" value =\"sec\">";
                     buf = buf.." <p><input type=\"submit\"></p> ";

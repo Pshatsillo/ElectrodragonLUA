@@ -1,5 +1,5 @@
 oldvalue = -1
-i2c_status = {"NA", "NA","NA","NA","NA","NA","NA","NA"}
+i2c_status = {}
 id = 0
 sda = 1
 scl = 2

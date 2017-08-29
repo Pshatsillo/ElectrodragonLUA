@@ -1,0 +1,11 @@
+ports={}
+ports[0] = "OUT"
+ports[1] = "OUT"
+ports[2] = "IN"
+ports[3] = "IN"
+ports[4] = "IN"
+ports[5] = "IN"
+ports[6] = "IN"
+ports[7] = "IN"
+ports[8] = "IN"
+ports[9] = "IN"

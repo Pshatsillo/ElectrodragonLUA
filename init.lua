@@ -9,6 +9,8 @@ if files["i2c.lua"] then dofile("i2c.lua") end
 --dofile("i2c.lua")
 if files["gpio.lua"] then dofile("gpio.lua") end
 --dofile("gpio.lua")
+if files["portinit.lua"] then dofile("portinit.lua") end
+--dofile("portinit.lua");
 if files["tinyweb.lua"] then dofile("tinyweb.lua") end
 --dofile("tinyweb.lua")
 end
